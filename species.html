@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你是哪种物种？| 物种鉴定测试</title>
+    <meta name="description" content="26道无厘头问题，鉴定你是哪种神奇物种。融合玄学+瞎扯+心理学，准到让你怀疑人生！">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0c29 100%); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 15px; overflow-x: hidden; }
+        .container { background: rgba(255, 255, 255, 0.97); border-radius: 30px; box-shadow: 0 30px 80px rgba(0,0,0,0.5); max-width: 520px; width: 100%; overflow: hidden; position: relative; margin: 20px 0; }
+        .container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #667eea, #764ba2, #f5576c, #667eea); background-size: 300% 100%; animation: gradientMove 3s linear infinite; }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+        .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 35px 20px; text-align: center; color: white; position: relative; }
+        .header h1 { font-size: 26px; margin-bottom: 8px; position: relative; z-index: 1; }
+        .header p { font-size: 13px; opacity: 0.8; position: relative; z-index: 1; }
+        .content { padding: 25px 20px; }
+        .start-container { text-align: center; padding: 20px 10px; }
+        .start-emoji { font-size: 85px; margin-bottom: 15px; animation: float 3s ease-in-out infinite; display: inline-block; }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
+        .start-title { font-size: 26px; font-weight: 900; background: linear-gradient(135deg, #667eea, #f5576c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; }
+        .start-desc { font-size: 14px; color: #666; margin-bottom: 25px; line-height: 1.8; }
+        .start-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f5576c 100%); color: white; border: none; padding: 16px 50px; font-size: 17px; font-weight: 700; border-radius: 60px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
+        .start-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5); }
+        .version-toggle { margin: 20px 0; }
+        .version-btn { background: transparent; border: 2px solid #667eea; color: #667eea; padding: 10px 25px; border-radius: 25px; font-size: 13px; cursor: pointer; transition: all 0.3s ease; }
+        .version-btn:hover { background: #667eea; color: white; }
+        .tips { margin-top: 20px; padding: 14px 18px; background: linear-gradient(135deg, #f0f4ff, #e0e7ff); border-radius: 14px; font-size: 13px; color: #4338ca; border-left: 4px solid #667eea; }
+        .back-btn { margin: 10px 5px; padding: 10px 25px; background: transparent; border: 2px solid #667eea; border-radius: 25px; font-size: 13px; color: #667eea; cursor: pointer; }
+        .back-btn:hover { background: #667eea; color: white; }
+        .question-container { display: none; }
+        .question-container.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .progress-wrap { margin-bottom: 20px; }
+        .progress-text { font-size: 13px; color: #667eea; font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .progress { display: flex; gap: 5px; flex-wrap: wrap; }
+        .progress-dot { width: 12px; height: 12px; border-radius: 50%; background: #e9ecef; transition: all 0.3s ease; }
+        .progress-dot.done { background: #667eea; }
+        .progress-dot.active { background: #f5576c; transform: scale(1.2); }
+        .question-text { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-bottom: 20px; line-height: 1.5; position: relative; padding-left: 18px; }
+        .question-text::before { content: '▌'; position: absolute; left: 0; color: #f5576c; font-size: 14px; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { padding: 14px 18px; background: #fff; border: 2px solid #e9ecef; border-radius: 16px; cursor: pointer; transition: all 0.3s ease; font-size: 14px; color: #495057; display: flex; align-items: center; gap: 12px; }
+        .option:hover { border-color: #f5576c; background: #fff5f5; transform: translateX(5px); }
+        .option-emoji { font-size: 22px; }
+        .result-container { display: none; }
+        .result-container.active { display: block; animation: fadeIn 0.8s ease; }
+        .result-badge { display: inline-block; background: linear-gradient(135deg, #667eea, #f5576c); color: white; padding: 6px 20px; border-radius: 25px; font-size: 13px; font-weight: 700; margin-bottom: 15px; letter-spacing: 1px; }
+        .result-emoji { font-size: 75px; margin-bottom: 10px; animation: bounce 1s ease infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .result-title { font-size: 28px; font-weight: 900; color: #1a1a2e; margin-bottom: 8px; }
+        .result-subtitle { font-size: 14px; color: #f5576c; font-weight: 600; margin-bottom: 20px; }
+        .astrology-section { background: linear-gradient(135deg, #f0f4ff, #e8efff); border-radius: 16px; padding: 15px; margin-bottom: 20px; }
+        .astrology-title { font-size: 14px; color: #4338ca; font-weight: 700; margin-bottom: 12px; }
+        .astrology-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .astrology-tag { background: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; color: #667eea; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2); }
+        .result-desc { text-align: left; font-size: 14px; line-height: 1.8; color: #495057; max-height: 50vh; overflow-y: auto; }
+        .result-desc h3 { color: #1a1a2e; font-size: 15px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #e9ecef; }
+        .result-desc p { margin-bottom: 15px; white-space: pre-line; }
+        .suggestion { background: linear-gradient(135deg, #fff5f5, #ffe8e8); padding: 12px 16px; border-radius: 12px; font-size: 13px; color: #d32f2f; border-left: 4px solid #f5576c; }
+        .restart-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px 40px; font-size: 15px; font-weight: 700; border-radius: 50px; cursor: pointer; margin: 20px 0; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
+        .stats { font-size: 12px; color: #999; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 物种鉴定中心</h1>
+            <p>基于胡扯但略有科学依据的人格测试</p>
+        </div>
+        <div class="content">
+            <div class="start-container" id="startScreen">
+                <div class="start-emoji">🐾</div>
+                <div class="start-title">你是哪种"物种"?</div>
+                <div class="start-desc">26道无厘头问题<br>26种奇葩物种鉴定<br>融合玄学+瞎扯+心理学<br><strong style="color: #f5576c;">准到让你怀疑人生！</strong></div>
+                <button class="start-btn" onclick="startTest()">🚀 开始鉴定</button>
+                <div class="version-toggle">
+                    <button class="version-btn" id="versionBtn" onclick="toggleVersion()">切换为：文言文版</button>
+                </div>
+                <button class="back-btn" onclick="goHome()">🏠 返回首页</button>
+                <div class="tips">💡 <strong>tip：</strong>凭直觉选，越离谱越准！</div>
+                <button class="back-btn" onclick="goHome()">🏠 返回首页</button>
+            </div>
+            <div class="question-container" id="questionScreen">
+                <div class="progress-wrap">
+                    <div class="progress-text">第 <span id="currentNum">1</span> / 26 题</div>
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="options"></div>
+                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                    <button class="back-btn" id="backBtn" onclick="goBack()">← 返回上一题</button>
+                    <button class="back-btn" onclick="goHome()">🏠 返回首页</button>
+                </div>
+            </div>
+            <div class="result-container" id="resultScreen">
+                <div class="result-badge" id="resultBadge">鉴定完成</div>
+                <div class="result-emoji" id="resultEmoji"></div>
+                <div class="result-title" id="resultTitle"></div>
+                <div class="result-subtitle" id="resultSubtitle"></div>
+                <div class="astrology-section">
+                    <div class="astrology-title">🔮 瞎扯指数分析</div>
+                    <div class="astrology-tags">
+                        <span class="astrology-tag" id="chaIndex"></span>
+                        <span class="astrology-tag" id="fortuneTag"></span>
+                        <span class="astrology-tag" id="astrologyLucky"></span>
+                    </div>
+                </div>
+                <div class="result-desc" id="resultDesc"></div>
+                <button class="restart-btn" id="restartBtn" onclick="restartTest()">🔄 再测一次</button>
+                <button class="back-btn" onclick="goHome()">🏠 返回首页</button>
+                <div class="stats" id="statsText"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var chaTypes = ["话痨指数", "穷鬼指数", "咸鱼指数", "八卦指数", "社恐指数", "脱单概率", "财运指数", "幸运指数", "犯傻指数", "犯困指数", "疯狂指数"];
+        var fortuneTypes = ["水逆期", "锦鲤附体", "欧皇降临", "普通但幸运", "莫名好运", "玄学加成"];
+        var luckyNumbers = ["7", "3", "9", "8", "4", "2"];
+        var luckyColors = ["紫色", "粉色", "蓝色", "绿色", "金色", "彩虹色"];
+        var userCha = chaTypes[Math.floor(Math.random() * chaTypes.length)];
+        var userFortune = fortuneTypes[Math.floor(Math.random() * fortuneTypes.length)];
+        var userLuckyNum = luckyNumbers[Math.floor(Math.random() * luckyNumbers.length)];
+        var userLuckyColor = luckyColors[Math.floor(Math.random() * luckyColors.length)];
+        var questions = [
+            { text: "Q1: 早上睁眼第一件事？", options: [{ emoji: "🥐", text: "找东西吃", type: "foodie" }, { emoji: "📱", text: "刷手机", type: "phone" }, { emoji: "🧘", text: "发会儿呆", type: "slacker" }, { emoji: "🚽", text: "上厕所", type: "pooper" }] },
+            { text: "Q2: 收到微信消息时？", options: [{ emoji: "✅", text: "秒回", type: "eager" }, { emoji: "🕐", text: "已读不回", type: "cold" }, { emoji: "📱", text: "看了就忘记回", type: "phone" }, { emoji: "🤔", text: "想半天才回", type: "drama" }] },
+            { text: "Q3: 周末通常怎么过？", options: [{ emoji: "🏃", text: "出门浪", type: "party" }, { emoji: "🏠", text: "在家宅", type: "hermit" }, { emoji: "💻", text: "加班", type: "worker" }, { emoji: "🛏️", text: "睡一整天", type: "sleepy" }] },
+            { text: "Q4: 朋友突然约你吃饭？", options: [{ emoji: "🎉", text: "马上答应", type: "eager" }, { emoji: "😰", text: "内心挣扎", type: "anxiety" }, { emoji: "💰", text: "问谁请客", type: "cheap" }, { emoji: "🍕", text: "说想去但不动", type: "lazybone" }] },
+            { text: "Q5: 你觉得自己像哪种动物？", options: [{ emoji: "🐶", text: "热情的狗", type: "doggo" }, { emoji: "🐱", text: "高冷的猫", type: "cat" }, { emoji: "🐭", text: "胆小的鼠", type: "coward" }, { emoji: "🦦", text: "爱玩的水獭", type: "otter" }] },
+            { text: "Q6: 听到别人背后说你？", options: [{ emoji: "😤", text: "直接去问", type: "fighter" }, { emoji: "😏", text: "默默记仇", type: "grudge" }, { emoji: "😌", text: "完全不在意", type: "buddha" }, { emoji: "🤫", text: "偷偷传八卦", type: "gossip" }] },
+            { text: "Q7: 吃饭时你通常？", options: [{ emoji: "🍚", text: "狼吞虎咽", type: "foodie" }, { emoji: "🍽️", text: "细嚼慢咽", type: "princess" }, { emoji: "📺", text: "边吃边玩手机", type: "phone" }, { emoji: "����", text: "盯着别人碗", type: "thief" }] },
+            { text: "Q8: 遇到麻烦事时？", options: [{ emoji: "🔧", text: "自己想办法", type: "hero" }, { emoji: "🙋", text: "找别人帮忙", type: "baby" }, { emoji: "😰", text: "逃避拖延", type: "ostrich" }, { emoji: "💡", text: "先发朋友圈", type: "drama" }] },
+            { text: "Q9: 如果有超能力，你想要？", options: [{ emoji: "💰", text: "隐身术", type: "pervert" }, { emoji: "💪", text: "大力无穷", type: "fighter" }, { emoji: "⏰", text: "时间倒流", type: "time" }, { emoji: "🧠", text: "读心术", type: "gossip" }] },
+            { text: "Q10: 你的口头禅最常是？", options: [{ emoji: "😎", text: "随便啦", type: "buddha" }, { emoji: "💪", text: "冲鸭", type: "fighter" }, { emoji: "😴", text: "好困", type: "sleepy" }, { emoji: "💯", text: "绝了", type: "fan" }] },
+            { text: "Q11: 你洗澡通常要多久？", options: [{ emoji: "🚿", text: "5分钟解决", type: "efficiency" }, { emoji: "🛁", text: "30分钟起", type: "princess" }, { emoji: "🎤", text: "边洗边唱歌", type: "otter" }, { emoji: "📱", text: "洗到手机没电", type: "phone" }] },
+            { text: "Q12: 点外卖你最看重？", options: [{ emoji: "💰", text: "价格便宜", type: "cheap" }, { emoji: "⭐", text: "店铺评分", type: "fan" }, { emoji: "🚴", text: "配送速度", type: "efficiency" }, { emoji: "🍜", text: "口味好吃", type: "foodie" }] },
+            { text: "Q13: 在微信群里你通常？", options: [{ emoji: "💬", text: "疯狂刷屏", type: "chatty" }, { emoji: "🙄", text: "只看不说", type: "lurker" }, { emoji: "👍", text: "只点赞不发", type: "fan" }, { emoji: "😶", text: "基本不看", type: "hermit" }] },
+            { text: "Q14: 追剧时的你？", options: [{ emoji: "🌙", text: "通宵连看", type: "insomnia" }, { emoji: "📺", text: "一天看一集", type: "slow" }, { emoji: "⏩", text: "2倍速快进", type: "efficiency" }, { emoji: "😢", text: "哭得稀里哗啦", type: "crybaby" }] },
+            { text: "Q15: 做错事后你通常？", options: [{ emoji: "😅", text: "马上道歉", type: "eager" }, { emoji: "🤷", text: "绝不承认", type: "stubborn" }, { emoji: "😏", text: "甩锅别人", type: "trickster" }, { emoji: "😴", text: "假装没发生", type: "ostrich" }] },
+            { text: "Q16: 你最害怕什么？", options: [{ emoji: "👻", text: "鬼", type: "coward" }, { emoji: "💰", text: "没钱", type: "cheap" }, { emoji: "📱", text: "手机没电", type: "phone" }, { emoji: "👮", text: "尴尬", type: "anxiety" }] },
+            { text: "Q17: 出门前你准备多久？", options: [{ emoji: "⚡", text: "5分钟搞定", type: "efficiency" }, { emoji: "🪞", text: "打扮1小时", type: "princess" }, { emoji: "🤔", text: "纠结半小时", type: "anxiety" }, { emoji: "😴", text: "快迟到才起", type: "sleepy" }] },
+            { text: "Q18: 你怎么看待加班？", options: [{ emoji: "💪", text: "奋斗使我快乐", type: "worker" }, { emoji: "😰", text: "能躲就躲", type: "lazybone" }, { emoji: "🤷", text: "与我无关", type: "buddha" }, { emoji: "💰", text: "给钱就行", type: "money" }] },
+            { text: "Q19: 吃到瓜时你通常？", options: [{ emoji: "🍉", text: "第一个传播", type: "gossip" }, { emoji: "📱", text: "等反转", type: "suspicious" }, { emoji: "😶", text: "关我啥事", type: "buddha" }, { emoji: "🤔", text: "分析来分析去", type: "drama" }] },
+            { text: "Q20: 睡前最后一件事？", options: [{ emoji: "📱", text: "刷手机", type: "phone" }, { emoji: "💭", text: "胡思乱想", type: "drama" }, { emoji: "😴", text: "秒睡", type: "sleepy" }, { emoji: "📖", text: "看书", type: "bookworm" }] },
+            { text: "Q21: 被别人夸奖时你？", options: [{ emoji: "😎", text: "谦虚说还好", type: "humble" }, { emoji: "🦄", text: "那必须的", type: "unicorn" }, { emoji: "😳", text: "尴尬到起飞", type: "shy" }, { emoji: "💪", text: "谢谢继续努力", type: "fighter" }] },
+            { text: "Q22: 你觉得AI未来会？", options: [{ emoji: "🤖", text: "统治人类", type: "pessimist" }, { emoji: "💰", text: "帮我赚钱", type: "money" }, { emoji: "🎮", text: "陪我打游戏", type: "otter" }, { emoji: "📚", text: "帮我写作业", type: "lazybone" }] },
+            { text: "Q23: 你的手机铃声是？", options: [{ emoji: "🔔", text: "系统默认", type: "normal" }, { emoji: "🎵", text: "网红歌曲", type: "fan" }, { emoji: "🔕", text: "常年静音", type: "hermit" }, { emoji: "🎤", text: "自己录的歌", type: "otter" }] },
+            { text: "Q24: 你怎么看待社恐？", options: [{ emoji: "😰", text: "那就是我", type: "anxiety" }, { emoji: "😎", text: "不存在", type: "eager" }, { emoji: "🤷", text: "关我什么事", type: "buddha" }, { emoji: "😅", text: "又想又怕", type: "cat" }] },
+            { text: "Q25: 打车时你通常坐？", options: [{ emoji: "🚗", text: "抢前排座", type: "fighter" }, { emoji: "🪟", text: "坐后排", type: "cold" }, { emoji: "🎧", text: "戴耳机装睡", type: "phone" }, { emoji: "💬", text: "和司机聊天", type: "chatty" }] },
+            { text: "Q26: 你觉得自己最大优点？", options: [{ emoji: "🤩", text: "颜值高", type: "unicorn" }, { emoji: "💰", text: "有钱", type: "money" }, { emoji: "😇", text: "善良", type: "saint" }, { emoji: "🎯", text: "幽默", type: "otter" }] }
+        ];
+        var results = {
+            foodie: { emoji: "🥯", title: "碳水教父", subtitle: "你的身体70%是碳水化合物！", desc: "经过本中心2600个小时的研究（其实就一下午），我们发现你的人生座右铭是：来都来了，不吃点说得过去吗？\n\n据不完全统计（其实根本没统计），碳水教父型人格的胃容量比正常人大了2.7倍，你的意志力在美食面前比纸糊的还脆弱。\n\n更可怕的是，你的大脑已经形成了「食物雷达」，500米内有任何美食都会自动触发搜索模式。你看到食物时的多巴胺分泌量是正常人的340%，这数据是本中心编的，但你肯定信了。\n\n建议：体检报告该查查了就酱。", suggestion: "去查查体检报告吧，真的。" },
+            phone: { emoji: "📱", title: "手机成瘾精", subtitle: "你与手机的关系：生死相依！", desc: "本中心研究表明（其实没有研究），你的日均看手机次数超过300次，成功达到了「人机合一」的至高境界。\n\n你的眼睛已经进化出了「屏幕适应模式」，睡前看、醒来刷、上厕所刷、吃饭刷、走路刷...你的视线永远在屏幕和现实之间来回切换。\n\n根据不靠谱数据显示（就是我编的），你每天使用手机的时长可以绕地球三圈，你的手机电量焦虑指数达到了999+。\n\n更可怕的是，你已经患上了「离开手机就会死」综合征，平均每6分钟就要检查一次手机在不在身边。\n\n建议：该就医了，真的。", suggestion: "该就医了，真的。" },
+            slacker: { emoji: "😌", title: "发呆仙人", subtitle: "你的脑内剧场比Netflix还精彩！", desc: "经过本中心360度无死角研究（其实是坐着发呆时想到的），我们发现发呆仙人的人生座右铭是：想那么多干嘛，发呆它不香吗？\n\n你的前额叶已经进入了退休状态，每天最大的运动就是眨眼。你的脑内剧场比Netflix的付费会员还能播——24小时不间断，而且是VIP独享版。\n\n据科学家统计（我胡说的），发呆仙人每天的白日梦时长可以绕地球三圈，但执行力基本为零。你的梦想永远是：明天再说吧。\n\n建议你的人生格言应该改成：发呆恒久远，发呆永流传。\n\n建议：去发个呆吧，别打扰你了。", suggestion: "去发个呆吧，别打扰你了。" },
+            pooper: { emoji: "💩", title: "厕所哲学家", subtitle: "你不是在厕所，就是在去厕所的路上！", desc: "本中心历时3个月（其实就3分钟）的田野调查发现，厕所哲学家的人生格言是：大事小事，先蹲为敬。\n\n你的蹲坑时长成功创造了吉尼斯世界纪录，每次进厕所都像进行一次深度的灵魂洗礼——不带手机的那种。\n\n研究表明（我编的），你对厕所的感情比对自己的床还深，你人生中最美好的时光几乎都是在厕所度过的。\n\n你的专属技能包括但不限于：便秘式思考人生、蹲到腿麻依然坚持、以及把厕所当成第二个家。\n\n建议：记得带纸，别玩手机了，真的。", suggestion: "记得带纸，别玩手机了。" },
+            eager: { emoji: "🐕", title: "超级Eager狗", subtitle: "你热情到让人害怕！", desc: "经过本中心严谨的调查研究（其实就是在群里看到了），我们发现你的社交欲望比哈士奇还要旺盛——因为哈士奇只是拆家，你是拆人。\n\n你的人生字典里没有「边界感」三个字，你的催产素水平严重超标，导致你见人就扑，哦不对，是见人就热情。\n\n你回复消息的速度比客服还快——当然客服是拿工资的，你是倒贴的。你的热情可以把人吓跑，成功率达到87.3%。\n\n你发微信永远是秒回，打电话永远是秒接，约你永远是说来就来。你这哪是社交牛逼症，你这是社交恐怖分子。\n\n建议：稍微克制一下真的会死吗？", suggestion: "稍微克制一下真的会死吗？" },
+            cold: { emoji: "🧊", title: "北极冰山", subtitle: "你cosplay高冷已经入戏了！", desc: "本中心研究显示（根本就没有），你的冷漠程度可以媲美珠穆朗玛峰上的千年寒冰——还是那种没人敢爬的那种。\n\n你的已读不回技巧已经炉火纯青，成功研发了新型社交姿势：已读不回+看见装没看见+选择性失聪+直接装死。\n\n根据不完整统计（我乱说的），你每天说的最多的话就是「嗯」「哦」「都行」「随便」——字数比你的社交圈还少。\n\n你已经达到了「高冷如冰」的境界，你的冷漠是对世人最大的温柔，你的高冷��对��己最好的保护建议改名叫冰山美人，因为你真的冷死人不偿命。\n\n建议：稍微暖一下真的会死吗？", suggestion: "稍微暖一下真的会死吗？" },
+            goldfish: { emoji: "🐟", title: "金鱼脑容量", subtitle: "你的记忆只有7秒！", desc: "本中心经过长达2分钟的研究（根本没研究），发现你的记忆力和金鱼有的一拼——金鱼是7秒，你是7分钟不能再多了。\n\n你刚刚想说的话转头就忘，上一秒还记得要干嘛，下一秒就变成了「我是谁我在哪」。你手机里的备忘录比你的脑子还好使。\n\n研究表明（我编的），你的短期记忆属于濒危物种，急需保护。你的大脑已经自动开启了「自动清除模式」——有用的没用的，先删了再说。\n\n你最常说的三句话是：「我刚刚想说什么来着？」「我手机呢？」「欸你怎么在这？」\n\n建议：设个闹钟吧求你了，真的。", suggestion: "设个闹钟吧求你了。" },
+            drama: { emoji: "🎭", title: "戏精本精", subtitle: "你的内心戏可以拍100集电视剧！", desc: "经过本中心专业鉴定（并没有），你的杏仁核比常人大三圈——专门负责脑补各种剧情。\n\n朋友一句话你能解读出800种含义你自己的内心戏比《甄嬛传》还精彩，比《顶楼》还狗血，比《家有儿女》还温馨。\n\n你不是在演戏，就是在准备演戏的路上。你的戏精指数达到了999+，成功入选「奥斯卡欠你小金人」排行榜。\n\n研究表明（乱说的），你每天内心演绎的剧情可以拍成100集连续剧，主演是你，导演是你，观众还是你——还是那种自己买票看的。\n\n建议：去演电影吧，真的。", suggestion: "去演电影吧真的。" },
+            party: { emoji: "🎉", title: "派对狂魔", subtitle: "你的体内流淌着不安分的血液！", desc: "本中心研究表明（怎么可能有），你的社交牛逼症已经进入了晚期——晚期没救的那种。\n\n你的夜生活比你的白天还精彩，你的精力比永动机还持久。你不是在聚会，就是在去聚会的路上；不是在喝酒，就是在喝酒的路上。\n\n你的社交能力可以让社恐患者当场去世，你的活跃程度可以让领导看了都害怕。据不完全统计（我编的），你参加过的聚会比吃过的饭还多，你的微信好友比你的头发还多——虽然你也没几根头发。\n\n你的人生信条是：今朝有酒今朝醉，明天再说明天的事。\n\n建议：该安静一下了，真的。", suggestion: "该安静一下了真的。" },
+            hermit: { emoji: "🦉", title: "家里蹲仙人", subtitle: "床以外的地方都是远方！", desc: "本中心经过深入研究（根本没有），发现你的出门欲望比大熊猫还低——大熊猫至少还知道出去找吃的，你连这个都懒得的。\n\n你的人生梦想就是：大门不出二门不迈，躺在床上直到世界灭亡。你的外卖订单比你的社交圈还丰富，你的床比你的朋友圈还重要。\n\n研究表明（我乱说的），你的出门难度和登月有的一拼，你需要鼓起的勇气比工资到账还难。你的专用技能包括：床到厕所的10米长征、客厅到厨房的远征、以及出门取快递的极限挑战。\n\n你已经达到了「家中仙人」的境界，你是属于那种可以一个月不出门却依然活得很好的人——别问怎么活的，问就是靠外卖和快递。\n\n建议：出去走走吧真的会死吗？", suggestion: "出去走走吧真的会死吗？" },
+            worker: { emoji: "🐴", title: "奋斗脑残粉", subtitle: "你卷到老板都害怕！", desc: "本中心研究表明（不可能有），你��工��欲望比永动机还持久，你的加班时间可以绕地球一圈——还是赤道。\n\n你的人生信条是：不工作就会死。你的老板对你的评价是：太卷了真的很烦。员工对你的评价是：你这样显得我们很废物。\n\n你的身体已经被996掏空但你依然觉得自己还能再卷五百年——虽然体检报告上的异常项比你的存款还多。\n\n研究表明（编的），你是那种凌晨2点还在回工作消息的人，是那种周末主动加班还不要加班费的人，是那种把公司当成家的人——虽然你家也没这么好。\n\n建议：去检查一下你的肝吧，真的。", suggestion: "去检查一下你的肝吧。" },
+            sleepy: { emoji: "😴", title: "特困生代表", subtitle: "你的人生除了睡觉就是睡觉！", desc: "本中心经过长期观察（根本没观察），发现你的睡眠需求是正常人的两倍——别人的闹钟是叫醒，你的闹钟是吓醒。\n\n你的起床难度可以和登月相比，你的闹钟已经设了800个但依然起不来——你是那种设10个闹钟还能睡过的人。\n\n研究表明（乱说的），你的人生梦想就是：睡到世界灭亡。你的上课/上班状态基本靠意念支撑——人是到了，灵魂还在床上。\n\n你的专属技能包括：秒睡技能、睡回笼觉技能、以及「再睡5分钟」循环技能。你的「再睡5分钟」可以睡到地老天荒，海枯石烂。\n\n建议：去查查嗜睡症吧，真的。", suggestion: "去查查嗜睡症吧真的。" },
+            doggo: { emoji: "🐶", title: "阳光小狗勾", subtitle: "你热情到能把人烫熟！", desc: "本中心研究表明（不可能），你的摇尾巴指数突破天际，你的热情可以把北极融化——当然融化的是冰川，你的心是热的。\n\n你见人就扑的技能已经炉火纯青，你的高兴程度取决于今天有没有人理你——虽然很多时候别人只是想跑。\n\n你是那种看到人就会兴奋到飞起的人，你的尾巴可以摇到产生龙卷风。你的人类好朋友属性达到了满格，你是那种别人给你一点好颜色你就能把所有家底都掏出来的人。\n\n研究表明（编的），你的社交能量是取之不尽用之不竭的，你是那种可以同时和10个人聊天还依然热情满满的人——虽然对方可能已经累了。\n\n建议：稍微稳重一点吧，真的。", suggestion: "稍微稳重一点吧真的。" },
+            cat: { emoji: "🐱", title: "傲娇小猫咪", subtitle: "你高冷到宇宙第一！", desc: "本中心经过专业鉴定（并没有），发现你的傲娇属性已经突破天际——天文学家都找不到的那种突破。\n\n你想被摸但你不说，你高冷但你不说，你其实很粘人但你更不会说。你的冷漠是对世人最大的温柔，你的高冷是对自己最好的保护。\n\n你是那种嘴上说「走开」身体却诚实地靠近的人，你是那种内心戏超多但脸上写着「关我什么事」的人。你发明了新的物种：猫型人格。\n\n研究表明（乱说的），你是那种需要别人先主动100次才会主动1次的人，你的傲娇指数是正常人的250%。\n\n建议：适当撒娇真的会死吗？", suggestion: "适当撒娇真的会死吗？" },
+            hamster: { emoji: "🐹", title: "屯粮仓鼠精", subtitle: "你的仓鼠属性已经拉满！", desc: "本中心研究表明（不可能），你的屯粮欲望比仓鼠还强烈——仓鼠至少还知道吃，你是只进不出。\n\n你的零食藏匿点遍布房间各个角落：床头柜、沙发缝、书包内层、抽屉深处...只有你想不到，没有你藏不到。\n\n你看到吃的就会自动开启屯粮模式，你的胃像无底洞一样永远填不满——虽然每次都说「这是最后一口」。你的收藏癖好包括但不限于：零食、快递、还有各种奇怪的省钱攻略。\n\n研究表明（编的），你是那种看到促销不买就浑身难受的人，你是那种双11可以熬到凌晨3点买一堆不需要的东西的人。\n\n建议：别再屯了真的，该减肥了。", suggestion: "别再屯了真的，该减肥了" },
+            otter: { emoji: "🦦", title: "整活水獭", subtitle: "你是欢乐源泉制造机！", desc: "本中心研究表明（根本没研究），你的整活天赋已经突破天际——科学家都想知道是怎么突破的。\n\n你的快乐多巴胺分泌比常人多十倍，你是那种走到哪里就把欢乐带到哪里的存在——即使是严肃的葬礼你也能找到笑点（不是叫你去啊！）。\n\n研究表明（乱说的），和你在一起的人快乐指数会上升300%——当然也可能上升的是尴尬指数。你是那种随时随地都能整出活的人，你是那种可以把任何场合变成欢乐场的人。\n\n你是社交圈的开心果，你是气氛组的组长，你是那种「有你在就不会冷场」的存在——虽然有时候冷的是你自己的场。\n\n建议：注意场合真的会死吗？", suggestion: "注意场合真的会死吗？" },
+            fighter: { emoji: "⚔️", title: "战斗鸡战士", subtitle: "你的战斗欲比打了鸡血还强！", desc: "本中心研究表明（不可能），你的战斗欲望已经突破天际——，鸡血都没你能打。\n\n你的人生信条是：能动手绝不废话。你的脾气比炸弹还爆炸，一言不合就开干——虽然最后往往是你先认输。\n\n你的肾上腺素水平永远处于高位，你的朋友都怕和你吵架——因为吵着吵着你就真的动手了。你是那种「脾气来得快去得也快」的人，但是来的时候真的很可怕。\n\n研究表明（编的），你是那种上一秒还在生气下一秒就好了的人——但是生气的那个瞬间可以吓死10个人。\n\n建议：稍微冷静一下真的会死吗？", suggestion: "稍微冷静一下真的会死吗？" },
+            grudge: { emoji: "📓", title: "记仇小本本", subtitle: "你的记仇技能已经点满！", desc: "本中心经过深入研究（根本没研究），发现你的记忆宫殿里专门有一层是用来记仇的——还是VIP专区的那种。\n\n你的小本本比你的课本记得还清楚，你记得别人一年前说过的话、做过的事、欠下的债。你可以把仇记得比自己的生日还清楚。\n\n你是那种「君子报仇十年不晚」的信奉者，你是那种「今天你让我不爽，明天我还回来」的行动派。你记仇的方式包括：写小本本、设闹钟提醒、以及深夜复盘。\n\n研究表明（乱说的），你的复仇计划比《复仇者联盟》还详细，你的记仇能力可以申报吉尼斯世界纪录——虽然没人想申报。\n\n建议：放下屠刀立地成佛吧，真的。", suggestion: "放下屠刀立地成佛吧。" },
+            buddha: { emoji: "🧘", title: "佛系仙人", subtitle: "你的无欲无求已经成仙！", desc: "本中心研究表明（不可能），你的人生境界已经达到了无欲无求的佛系状态——释迦牟尼看了都直呼内行。\n\n你的口头禅是「随便都行」「都行可以没关系」「我都可以」。你的前额叶已经实现了自动化管理——自动进入「无所谓」模式。\n\n你的境界让释迦牟尼都自愧不如——因为你真的什么都可以，你是那种「都行」到让自己都害怕的人。你是那种把「摆烂」当成人生信条的人，你是那种「就这样吧」说到世界末日的人。\n\n研究表明（编的），你的无欲无求指数是正常人的999%，你的人生座右铭是：只要我不努力，就没有人能说我。\n\n建议：稍微有点追求吧真的会死吗？", suggestion: "稍微有点追求吧真的会死吗？" },
+            gossip: { emoji: "🦅", title: "八卦 eagle", subtitle: "你是行走的娱乐圈！", desc: "本中心研究表明（根本没研究），你的八卦欲望比老鹰捕猎还强烈——老鹰是为了吃，你是为了分享。\n\n你的消息灵通程度可以秒杀狗仔队，你知道的八卦比电视剧还精彩——而且还是自带弹幕的那种。你分析八卦的能力可以去当侦探，你传播八卦的能力可以去当狗仔。\n\n你的好奇心比猫还重——但是是那种害死猫的好奇心，你是那种「有瓜必吃」的人，你是那种「没瓜也要制造瓜」的人。\n\n研究表明（乱说的），你是那种可以把「吃了没」聊成「国际局势」的人，你是那种聊八卦可以聊一整天的人——从早上睁眼到晚上闭眼。\n\n建议：去当狗仔队吧真的。", suggestion: "去当狗仔队吧真的。" },
+            princess: { emoji: "👸", title: "精致小公举", subtitle: "你的精致程度让凡尔赛宫自愧不如！", desc: "本中心研究表明（根本没研究），你的精致已经达到了令人发指的程度——连凡尔赛宫看了都直呼内行。\n\n你出门前的打扮时间可以看完一季电视剧，你补妆的时间可以用来写一篇论文。你对细节的追求到了丧心病狂的程度——虽然往往没人看。\n\n你的生活品质要求比公主还高，你的仪式感可以让生活重新定义——虽然往往只是感动自己。你是那种「精致到头发丝」的人，你是那种「精致穷」的代表人物。\n\n研究表明（乱说的），你是那种可以为了搭配衣服迟到1小时的人，你是那种「出门倒饬2小时」但是没人看的人。\n\n建议：稍微糙一点真的会死吗？", suggestion: "稍微糙一点真的会死吗？" },
+            hero: { emoji: "🦸", title: "孤胆英雄", subtitle: "你的人生不需要别人！", desc: "本中心研究表明（不可能），你的独立能力已经突破天际——珠穆朗玛峰都没你高。\n\n你的人生信条是：自己能搞定绝不麻烦别人。你修得了电脑通得了马桶，你扛得了水桶换得了灯泡，你一个人能扛起整个世界。\n\n你的独立让所有依赖你的人失业，因为你会说：「我自己来」「我可以」「不用管我」。你是那种「宁可自己累死也不麻烦别人」的人，你是那种「自己搞定一切」的超人。\n\n研究表明（乱说的），你是那种搬家一个人搞定的人，你是那种生病一个人去医院的人——虽然挂号的时候很孤独。\n\n建议：稍微依赖一下别人真的会死吗？", suggestion: "稍微依赖一下别人真的会死吗？" },
+            baby: { emoji: "👶", title: "巨婴本婴", subtitle: "你的巨婴属性已经拉满了！", desc: "本中心研究表明（根本没研究），你的依赖能力让「巨婴」这个词都自愧不如——因为巨婴至少还会走路，你是真的不会。\n\n你的人生信条是：有事找妈妈没事也找妈妈。你解决问题的能力基本为零，你的生存技能退化成了废柴——虽然点外卖的时候比谁都溜。\n\n你的口头禅是：「帮我一下」「这个我不会」「好麻烦啊」「我不想动」。你是那种「巨婴行为大赏」的常驻嘉宾，你是那种「离开别人就无法生存」的典型代表。\n\n研究表明（编的），你是那种28岁还需要妈妈帮忙整理行李的人，你是那种30岁还让妈妈操心的人——虽然每次都会被说。\n\n建议：该长大了真的。", suggestion: "该长大了真的。" },
+            cheap: { emoji: "💰", title: "抠���大���", subtitle: "你的抠门程度让葛朗台都落泪！", desc: "本中心研究表明（根本没研究），你的抠门已经达到了至高境界——葛朗台看了都要给你磕头。\n\n你省钱的能力可以让所有理财经理失业，你的抠门程度可以申报吉尼斯世界纪录。你的座右铭是：能省一分是一分，能不花就不花。\n\n你的新型技能包括：拼单、薅羊毛、优惠券收集专家、还有把每一分钱都花在刀刃上——虽然刀刃是什么你自己也不知道。\n\n研究表明（编的），你是那种为了1块钱可以绕路3公里的人，你是那种「这个月不花钱」挑战赛的冠军——虽然每次都失败。\n\n建议：稍微花点钱真的会死吗？", suggestion: "稍微花点钱真的会死吗？" },
+            lazybone: { emoji: "🛋️", title: "咸鱼本尊", subtitle: "你把躺平贯彻到了极致！", desc: "本中心研究表明（不可能），你的懒已经达到了返璞归真的境界——懒到连呼吸都觉得累。\n\n你的人生信条是：能躺着绝不坐着，能坐着绝不站着，能站着绝不走路，能走路绝不跑步——虽然你根本不想走。\n\n你的懒让发明家都自愧不如——因为你的存在让他们失去了创造的动力。你是那种「能躺着绝不动着」的信徒，你是那种「躺平到世界灭亡」的终极形态。\n\n研究表明（乱说的），你的懒可以分成三六九等，最高级的懒是「连懒都不想懒」——说的就是你。\n\n建议：动一下吧真的会死吗？", suggestion: "动一下吧真的会死吗？" },
+            money: { emoji: "💎", title: "拜金财迷", subtitle: "你的人生只有搞钱二字！", desc: "本中心研究表明（根本没研究），你的金钱欲望已经突破天际——马云看了都自愧不如。\n\n你的人生信条是：何以解忧唯有暴富。你的搞钱能力比印钞机还快，你的副业比主业还多，你看到的商机比谁都多。\n\n你看到钱比看到亲妈还亲，你的「新型技能」是：搞钱省钱攒钱以及做白日梦搞大钱。你的座右铭是：我爱钱钱爱我——虽然钱并不爱你。\n\n研究表明（编的），你是那种每天想着一夜暴富的人，你是那种「买彩票」当成副业的人，你是那种「搞钱」想到失眠的人。\n\n建议：稍微休息一下吧真的会死吗？", suggestion: "稍微休息一下吧真的会死吗？" },
+            fan: { emoji: "💯", title: "点赞狂魔", subtitle: "你的点赞欲望已经突破天际！", desc: "本中心研究表明（不可能），你的点赞欲望比强迫症还严重——强迫症都没你严重。\n\n你看到赞不点全身难受，你的点赞速度可以让服务器崩溃——虽然服务器不一定承认。你的点赞范围从朋友圈到微博到抖音到小红书，全平台覆盖。\n\n你是那种「手滑点赞」的专业户，你是那种「无赞不欢」的晚期患者。你的新型技能是：不点赞会死+手贱想点赞+点了赞又后悔。\n\n研究表明（乱说的），你是那种看一条朋友圈要点10个赞的人，你是那种「这个赞我点了」但是什么都没看到的人。\n\n建议：少点赞多做事吧真的会死吗？", suggestion: "少点赞多做事吧真的会死吗？" },
+            insomnia: { emoji: "🦉", title: "熬夜猫头鹰", subtitle: "你的夜生活比猫头鹰还精彩！", desc: "本中心研究表明（根本没研究），你的熬夜能力已经突破了人类极限——爱因斯坦都没你能熬。\n\n你的人生格言是：只要不睡就等于没熬夜。你的夜间精神比白天还亢奋——虽然白天你也是这个德行。\n\n你的新型技能是：通宵刷剧+通宵游戏+通宵想事情+通宵发呆。你的身体已经被熬夜掏空但你依然觉得自己很行——虽然每次起床都像要死。\n\n研究表明（编的），你是那种「熬夜到3点」还说自己睡不着的人，你是那种「再玩亿下」然后天亮的人。\n\n建议：去检查一下你的肝和心脏吧，真的。", suggestion: "去检查一下你的肝和心脏吧。" },
+            crybaby: { emoji: "💧", title: "眼泪制造机", subtitle: "你的眼泪比水龙头还厉害！", desc: "本中心研究表明（不可能），你的泪腺发达程度突破天际——水龙头看了都甘拜下风。\n\n你看个广告都能哭得稀里哗啦，你看电影哭得比主角还伤心，你听歌也能哭出工伤——虽然歌里唱的什么你都不知道。\n\n你是那种「眼里进不得沙子」的典型代表，你是那种「共情能力过强」的晚期患者——虽然有时候共情的是电视剧里的反派。\n\n研究表明（乱说的），你的泪点是负数，你是那种「看个天气预报都能哭」的人——虽然可能只是困了。\n\n建议：去当演员吧真的。", suggestion: "去当演员吧真的。" },
+            anxiety: { emoji: "😰", title: "焦虑小马达", subtitle: "你的焦虑可以发电！", desc: "本中心研究表明（根本没研究），你的焦虑已经达到了至高境界——发电厂看了都要向你学习。\n\n你的座右铭是：总有事情可以焦虑，总有担心不完的事。你的焦虑可以让发电机都自愧不如——因为你可以焦虑到产生能量。\n\n你是那种「担心这担心那」的重度患者，你是那种「未发生的事情先焦虑一遍」的先驱者。你的新型技能是：无时无刻不在焦虑+焦虑到失眠+焦虑到掉头发。\n\n研究表明（乱说的），你的焦虑可以分成800种不同的类型——从早上睁眼焦虑到晚上闭眼，从工作焦虑到生活焦虑，从今天焦虑到明天。\n\n建议：放宽心吧真的会死吗？", suggestion: "放宽心吧真的会死吗？" },
+            lurker: { emoji: "👁️", title: "潜水冠军", subtitle: "你潜水的深度可以参加奥运会！", desc: "本中心研究表明（根本没研究），你的潜水技术已经达到了化境——潜水艇都没你潜得深。\n\n你的人生格言是：只看不说是金，你行你素我素我行。你在群里永远是最安静的那个——但其实你一直在看，只是不说。\n\n你的观察能力比侦探还强，你是那种「掌握一切但什么都不说」的扫地僧。你的新型技能是：只看不说话+潜水到底+暗中观察。\n\n研究表明（编的），你是那种「窥屏王」的获得者，你是那种「看完全部但不发一言」的终极潜水员——虽然群主可能已经忘了你的存在。\n\n建议：说句话吧真的会死吗？", suggestion: "说句话吧真的会死吗？" },
+            chatty: { emoji: "🦜", title: "话唠鹦鹉", subtitle: "你说话的频率可以吵死人！", desc: "本中心研究表明（不可能），你的话唠已经达到了返璞归真的境界——鹦鹉看了都要甘拜下风。\n\n你的人生信条是：只要我不说话就会死——其实不说话确实会死，因为你的嘴闲不住。你的废话可以让唐僧自愧不如，你的话唠技能可以吵翻整个世界。\n\n别人是惜字如金，你是废话如雨——还是暴雨的那种。你的新型技能是：说话不停歇+废话连篇+自言自语+一个人可以开座谈会。\n\n研究表明（编的），你是那种「聊天可以聊到地老天荒」的人，你是那种「话题永远不完」的话唠重症患者——虽然往往对方已经累了。\n\n建议：稍微安静一下吧真的会死吗？", suggestion: "稍微安静一下吧真的会死吗？" },
+            bookworm: { emoji: "📚", title: "书虫本虫", subtitle: "你的书卷气可以熏死蚊子！", desc: "本中心研究表明（不可能），你的书虫属性已经达到了至高境界——书虫看了都要向你学习。\n\n你的人生信条是：书中自有黄金��，��中自有颜如玉，书中自有麻辣烫。你的阅读量可以让图书馆员都自愧不如，你的知识储备可以让百科全书汗颜。\n\n你是那种「无书不欢」的信徒，你是那种「一天不读书难受一周不读书难受一年不读书难受一辈子」的晚期患者。你的座右铭是：书是人类进步的阶梯，我是爬梯子的人。\n\n研究表明（乱说的），你是那种看书可以看一天的人，你是那种「知识就是力量」的铁杆粉丝——虽然力量在哪里并不知道。\n\n建议：稍微运动一下吧真的会死吗？", suggestion: "稍微运动一下吧真的会死吗？" },
+            normal: { emoji: "😐", title: "普通人", subtitle: "你普通到让人忘记你的存在！", desc: "本中心研究表明（不可能），你的普通已经达到了至高境界——普通到平庸，平庸到平凡，平凡到非凡。\n\n你没有任何特点，但你最大的特点就是「没有特点」。你是那种放在人群里就找不到的类型，你是那种让人记不住名字的类型——因为根本没有记住的必要。\n\n你的普通让统计学都汗颜——因为你的数据永远在平均值上，不高不低，不多不少，刚刚好就是普通。\n\n研究表明（编的），你是那种「路人甲」的典型代表，你是那种「可有可无」的代名词——虽然这也算是一种特点吧。\n\n建议：稍微有点特点吧真的会死吗？", suggestion: "稍微有点特点吧真的会死吗？" },
+            unicorn: { emoji: "🦄", title: "宇宙第一独特小公主", subtitle: "全世界你最special！", desc: "本中心研究表明（不可能），你的自恋程度突破天际——天文学家都找不到的那种突破。\n\n你的座右铭是：全世界我最特别，bling bling会发光。你每天照镜子的次数可以创造吉尼斯世界纪录——虽然记录员并不想记录。\n\n你是那种觉得自己是独一无二的烟火的人，你是那种「别人都是垃圾只有我是最棒的」的信徒——虽然往往别人并不这么认为。\n\n研究表明（乱说的），你是那种「我太难了因为太优秀」的人，你是那种「孤独求败」但是没人想和你败的人。\n\n建议：稍微照照镜子吧真的会死吗？", suggestion: "稍微照照镜子吧真的会死吗？" },
+            saint: { emoji: "👼", title: "圣母圣父", subtitle: "你的善良圣母到让人害怕！", desc: "本中心研究表明（不可能），你的善良已经超越了凡人的境界——圣母玛利亚都要给你让座。\n\n你的人生信条是：只要人人献出一点爱，世界将变成美好的人间。你的圣母心可以让上帝都感动，你的善良可以把敌人感化成朋友——虽然往往感动的是你自己。\n\n你是那种会被骗的类型，因为你觉得世界上所有都是好人——虽然往往证明你是错的。你是那种「以德报怨」的典型代表，你是那种「善良到傻」的重度患者。\n\n研究表明（乱说的），你是那种借钱给朋友然后朋友不还的人，你是那种「算了算了没关系」说到让自己都心疼的人。\n\n建议：稍微有点原则吧真的会死吗？", suggestion: "稍微有点原则吧真的会死吗？" },
+            shy: { emoji: "😳", title: "害羞到地底下", subtitle: "你害羞到可以钻到地心！", desc: "本中心研究表明（不可能），你的害羞已经达到可以和土地融合的程度——地心引力都没你强。\n\n你的人生信条是：不要看到我不要看到我。你社交的时候可以尴尬到用脚趾抠出三室一厅——还是精装修的那种。\n\n你是那种「别人看你一眼你就能红到脚趾」的人，你是那种「被夸一句能尴尬到原地去世」的重度患者��你��新型技能是：只要我不看别人就等于别人看不到我。\n\n研究表明（编的），你是那种接电话都会脸红的人，你是那种「社交恐惧症晚期」的典型代表——虽然往往只是你太敏感。\n\n建议：稍微大胆一点吧真的会死吗？", suggestion: "稍微大胆一点吧真的会死吗？" },
+            coward: { emoji: "🐭", title: "胆小鼠鼠", subtitle: "你的胆子和你的个子一样小！", desc: "本中心研究表明（根本没研究），你的胆量已经退化到了负数——负数都没你小。\n\n你怕黑怕鬼怕虫怕人怕所有的东西——包括你自己。你的尖叫分贝可以让玻璃破碎，你的逃跑速度可以参加奥运会。\n\n你是那种「怕怕怕」的代言人，你是那种「怂到不行」的典型代表。你的新型技能是：害怕+尖叫+逃跑+躲起来。\n\n研究表明（编的），你是那种看恐怖片要做好几天噩梦的人，你是那种「自己吓自己」的终极大师——虽然什么都没看到。\n\n建议：去练练胆子吧真的会死吗？", suggestion: "去练练胆子吧真的会死吗？" },
+            efficiency: { emoji: "⚡", title: "效率闪电侠", subtitle: "你的效率可以拯救世界！", desc: "本中心研究表明（不可能），你的效率已经突破了时间维度——爱因斯坦看了都直呼不可能。\n\n你的人生格言是：能用5分钟绝不用10分钟。你的快速思维可以让高铁自愧不如，你的执行力让所有拖延症患者汗颜——虽然他们汗的是冷汗。\n\n你的新型技能是：极速完成任务然后发呆——因为干完了就不知道该干嘛了。你的存在就是为了证明效率真的存在——虽然往往效率太快也没好事。\n\n研究表明（编的），你是那种「马上就好」「立刻就做」「已经在做了」的口头禅获得者——虽然往往还没做。\n\n建议：稍微慢一点真的会死吗？", suggestion: "稍微慢一点真的会死吗？" },
+            stubborn: { emoji: "🐏", title: "倔强小绵羊", subtitle: "你犟起来十头牛都拉不回来！", desc: "本中心研究表明（根本没研究），你的倔强已经达到了至高境界——牛顿看了都要撤回定律。\n\n你的人生信条是：老子说的是对的。你的字典里没有「认错」两个字——因为错的都是别人。\n\n你犟起来可以把黑的说成白的，你倔起来可以让地球倒着转——虽然地球并不想转。你的新型技能是：永不认错+嘴硬到底+我没错。\n\n研究表明（编的），你是那种「撞了南墙还要撞第二次」的人，你是那种「错了也不认」的死硬派——虽然往往错的真的是你。\n\n建议：稍微认个错真的会死吗？", suggestion: "稍微认个错真的会死吗？" },
+            trickster: { emoji: "🦊", title: "甩锅大师", subtitle: "你的甩锅技术已经达到化境！", desc: "本中心研究表明（不可能），你的甩锅能力已经出神入化——如来佛祖都接不住你的锅。\n\n你的人生格言是：只要我甩得够快，锅就追不上我。你的新型技能包括：装傻充愣+倒打一耙+先发制人+死不承认。\n\n你可以把所有的错都推给别人，你永远不会错因为错的都是别人——虽然明明就是你的错。你是那种「锅王」称号的获得者，你是那种「甩锅侠」的重症患者。\n\n研究表明（乱说的），你的锅可以堆成喜马拉雅山，你的锅可以绕地球三圈——虽然没一个锅是别人的。\n\n建议：稍微担点责任吧真的会死吗？", suggestion: "稍微担点责任吧真的会死吗？" },
+            thief: { emoji: "🐾", title: "盯梢狂魔", subtitle: "你盯人家碗的眼神让人发毛！", desc: "本中心研究表明（不可能），你的占有欲已经突破天际——天文学家都找不到的那种突破。\n\n你看别人东西的眼神像狼看到了肉——还是那种三天没吃饭的狼。你总觉得别人的东西比自己的香，你是那种「得不到的永远在骚动」的信奉者。\n\n你的新型技能是：盯梢+觊觎+想要占有+垂涎三尺。你的嫉妒心可以让《甄嬛传》自愧不如——因为你是真的会抢。\n\n研究表明（编的），你是那种吃着自己碗里看着别人锅里的人，你是那种「别人的都是香的」体质——自己的永远不如别人的好。\n\n建议：看自己的碗吧求你了，真的。", suggestion: "看自己的碗吧求你了。" },
+            pessimistic: { emoji: "🌚", title: "人间悲观主义", subtitle: "你悲观到让抑郁患者都佩服！", desc: "本中心研究表明（根本没研究），你的悲观已经达到了艺术境界——毕加索看了都要叫老师。\n\n你的座右铭是：这个世界上只有坏事会发生，好事？那一定是骗人的。你的悲观可以让天气预报都自愧不如——因为你的预测永远是负面的。\n\n你是那种「总有一天会被我发现」的信徒，你是那种「人间不值得」的代言人。你的新型技能是：未卜先知的悲观+杞人忧天+总是往坏处想。\n\n研究表明（乱说的），你是那种「万一」先生，你是那种「肯定不行」的常客——虽然往往行的是你。\n\n建议：吃点甜的真的会死吗？", suggestion: "吃点甜的真的会死吗？" },
+            suspicious: { emoji: "🤨", title: "疑神疑鬼王", subtitle: "你的疑心可以怀疑到宇宙尽头！", desc: "本中心研究表明（不可能），你的疑心已经突破了天际——天文学家都找不到边。\n\n你的座右铭是：总有刁民想害朕，总有阴谋要害我。你看什么都是阴谋，你怀疑一切——包括你自己。\n\n你的新型技能是：怀疑人生+怀疑世界+怀疑宇宙+怀疑自己为什么要怀疑。你可以怀疑到让爱因斯坦都自愧不如——因为爱因斯坦都没你会怀疑。\n\n研究表明（乱说的），你是那种「这一定有诈」先生，你是那种「肯定有阴谋」的忠实信徒——虽然往往并没有阴谋。\n\n建议：稍微单纯一点真的会死吗？", suggestion: "稍微单纯一点真的会死吗？" },
+            humble: { emoji: "🙇", title: "谦虚本虚", subtitle: "你谦虚到让人以为你假的！", desc: "本中心研究表明（根本没研究），你的谦虚已经达到了反人类的地步——反谦虚人士看了都直呼离谱。\n\n你的新型技能是：疯狂谦虚+疯狂否定自己+疯狂踩自己抬高别人+疯狂说「哪里哪里」。你的谦虚让凡尔赛宫都自愧不如，你的低调可以让所有人忽视你——虽然你并不想被忽视。\n\n你是那种别人夸你你会说「哪里哪里」的人，你是那种谦虚到让自己都讨厌自己的人——因为真的太谦虚了。\n\n研究表明（编的），你是那种别人问「你有没有空」你说「很忙」的人，你是那种「谦虚综合征」的晚期患者。\n\n建议：稍微自信一点吧真的会死吗？", suggestion: "稍微自信一点吧真的会死吗？" },
+            time: { emoji: "⏰", title: "时间管理大师", subtitle: "你的时间观念去哪里了？", desc: "本中心研究表明（不可能），你的时间管理能力已经突破了天际——因为你根本就没管理。\n\n你的座右铭是：时间就像乳沟，挤一挤总会有的——但你从来不挤。你的时间永远不够用，但永远在浪费。\n\n你是那种「还有5分钟」然后迟到了半小时的人，你是那种「我马上到」但还���床���的人。\n\n研究表明（编的），你是那种Deadline是第一生产力的信仰者，你是那种不到最后一刻不开始的人。\n\n建议：看看你的日程表吧。", suggestion: "看看你的日程表吧。" },
+            pervert: { emoji: "🔮", title: "隐形猥琐男", subtitle: "你的脑内剧场很精彩！", desc: "本中心研究表明（不可能），你的内心戏已经突破了天际——专门想一些不该想的东西。\n\n你的座右铭是：隐身术——你到底想干嘛我不敢想。你的大脑里有一整个岛国电影库你自己清楚。\n\n你是那种表面正经内心禽兽的人，你是那种看到漂亮小姐姐就走不动道的人。\n\n研究表明（编的），你是那种需要警察叔叔来找你的人。\n\n建议：做个人吧真的。", suggestion: "做个人吧真的。" },
+            wolf: { emoji: "🐺", title: "狼吞虎咽侠", subtitle: "你的吃饭速度可以打破吉尼斯！", desc: "本中心研究表明（不可能），你的吃饭速度比博尔特还快——博尔特是跑得快，你是吃得快。\n\n你的咀嚼次数用手指都能数过来——因为根本没怎么嚼。你吃饭的效率让食堂阿姨都自愧不如，你是那种「饭还没到嘴里已经下肚」的人。\n\n你的胃像无底洞一样可以吞噬一切，你吃饭的样子让同桌的人都不敢相信你是人类——虽然吃相确实不太像。建议你改名叫大胃王因为你真的很能吃。\n\n研究表明（编的），你是那种「饭要趁热吃」的信奉者，你是那种「吃不完就浪费」的信徒——虽然每次都点太多。\n\n建议：细嚼慢咽真的会死吗？", suggestion: "细嚼慢咽真的会死吗？" },
+            slow: { emoji: "🐢", title: "慢性子王八", subtitle: "你慢到急死人不偿命！", desc: "本中心研究表明（根本没研究），你的慢性子已经达到了返璞归真的境界——树懒看了都要给你让位。\n\n你的人生信条是：慢慢来比较快。你的慢可以让时间静止，你的拖延可以让宇宙倒着转——虽然宇宙并不想转。\n\n你是那种「能拖一秒是一秒」的信徒，你是那种「不急，慢慢来」说到世界末日的人。别人是争分夺秒，你是能拖一秒是一秒。\n\n研究表明（乱说的），你是那种「等一下」「马上」「好了」要等一个世纪的人，你是那种「慢性子晚期」的典型代表。\n\n建议：稍微快一点真的会死吗？", suggestion: "稍微快一点真的会死吗？" },
+            ostrich: { emoji: "🦢", title: "逃避鸵鸟", subtitle: "你把头埋进沙子的技术一流！", desc: "本中心研究表明（不可能），你的逃避技术已经出神入化——鸵鸟看了都要拜你为师。\n\n你的人生格言是：看不见就等于没发生。你的鸵鸟技能比真正的鸵鸟还厉害——因为鸵鸟只是把头埋进去，你是整个人都不见了。\n\n你面对问题的态度是：能躲一天是一天，能拖一时是一时。你的新技能是：选择性遗忘+装傻充愣+装不在家+人间蒸发。\n\n研究表明（乱说的），你是那种「明天再说」说到世界末日的人，你是那种「再缓缓」缓到事情自动解决的人——虽然一般不会自动解决。\n\n建议：面对现实吧真的会死吗？", suggestion: "面对现实吧真的会死吗？" }
+        };
+        var currentQuestion = 0;
+        var scores = {};
+        var answers = [];
+        var isWenyan = false;
+        function startTest() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('questionScreen').classList.add('active');
+            showQuestion();
+        }
+        function toggleVersion() {
+            isWenyan = !isWenyan;
+            var btn = document.getElementById('versionBtn');
+            if (isWenyan) { btn.textContent = "切换为：白话文版"; }
+            else { btn.textContent = "切换为：文言文版"; }
+            currentQuestion = 0;
+            scores = {};
+            answers = [];
+            document.getElementById('resultScreen').classList.remove('active');
+            document.getElementById('questionScreen').classList.remove('active');
+            document.getElementById('startScreen').style.display = 'block';
+        }
+        function showQuestion() {
+            var q = questions[currentQuestion];
+            document.getElementById('questionText').textContent = q.text;
+            document.getElementById('currentNum').textContent = currentQuestion + 1;
+            var progress = document.getElementById('progress');
+            progress.innerHTML = '';
+            for (var i = 0; i < questions.length; i++) {
+                var dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (i < currentQuestion) dot.classList.add('done');
+                if (i === currentQuestion) dot.classList.add('active');
+                progress.appendChild(dot);
+            }
+            var backBtn = document.getElementById('backBtn');
+            if (currentQuestion > 0) { backBtn.style.display = 'inline-block'; }
+            else { backBtn.style.display = 'none'; }
+            var optionsEl = document.getElementById('options');
+            optionsEl.innerHTML = '';
+            for (var j = 0; j < q.options.length; j++) {
+                var opt = q.options[j];
+                var btn = document.createElement('div');
+                btn.className = 'option';
+                btn.innerHTML = '<span class="option-emoji">' + opt.emoji + '</span><span class="option-text">' + opt.text + '</span>';
+                btn.onclick = (function(type) { return function() { selectOption(type); }; })(opt.type);
+                optionsEl.appendChild(btn);
+            }
+        }
+        function selectOption(type) {
+            answers[currentQuestion] = type;
+            scores[type] = (scores[type] || 0) + 1;
+            setTimeout(function() {
+                currentQuestion++;
+                if (currentQuestion < questions.length) { showQuestion(); }
+                else { initTest(); }
+            }, 300);
+        }
+        function goBack() {
+            if (currentQuestion > 0) {
+                var prevType = answers[currentQuestion - 1];
+                if (prevType && scores[prevType] > 0) {
+                    scores[prevType]--;
+                    if (scores[prevType] === 0) delete scores[prevType];
+                }
+                currentQuestion--;
+                showQuestion();
+            } else {
+                document.getElementById('questionScreen').classList.remove('active');
+                document.getElementById('resultScreen').classList.remove('active');
+                document.getElementById('startScreen').style.display = 'block';
+            }
+        }
+        function initTest() {
+            document.getElementById('questionScreen').classList.remove('active');
+            var maxType = Object.keys(scores).reduce(function(a, b) { return scores[a] > scores[b] ? a : b; });
+            var result = results[maxType] || results.normal;
+            document.getElementById('chaIndex').textContent = userCha + ': ' + Math.floor(Math.random() * 30 + 70) + '%';
+            document.getElementById('fortuneTag').textContent = userFortune;
+            document.getElementById('astrologyLucky').textContent = '幸运数字' + userLuckyNum + ' | ' + userLuckyColor;
+            document.getElementById('resultEmoji').textContent = result.emoji;
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultSubtitle').textContent = result.subtitle;
+            document.getElementById('resultDesc').innerHTML = '<h3>📜 物种鉴定报告</h3><p>' + result.desc.replace(/\n\n/g, '</p><p>') + '</p><div class="suggestion">' + result.suggestion + '</div>';
+            var totalTests = Math.floor(Math.random() * 50000 + 10000);
+            document.getElementById('statsText').textContent = '已有 ' + totalTests.toLocaleString() + ' 人参与鉴定 | 准确率高达 ' + Math.floor(Math.random() * 10 + 85) + '%';
+            document.getElementById('resultScreen').classList.add('active');
+        }
+        function restartTest() {
+            currentQuestion = 0;
+            scores = {};
+            answers = [];
+            document.getElementById('resultScreen').classList.remove('active');
+            document.getElementById('questionScreen').classList.remove('active');
+            document.getElementById('startScreen').style.display = 'block';
+        }
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

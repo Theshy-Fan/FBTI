@@ -1231,19 +1231,7 @@
 
         function goToTest(type) {
             if (type === 'species') {
-                document.getElementById('homeScreen').style.display = 'none';
-                document.getElementById('startScreen').style.display = 'block';
-                // 初始化测试
-                currentQuestion = 0;
-                answers = [];
-                scores = {};
-                userCha = randomItem(chas);
-                userFortune = randomItem(fortunes);
-                userLuckyNum = Math.floor(Math.random() * 99 + 1);
-                userLuckyColor = randomItem(colors);
-                isWenyan = false;
-                document.getElementById('versionBtn').textContent = "切换为：文言文版";
-                document.querySelector('.start-title').textContent = "你是哪种\"物种\"?";
+                window.location.href = 'species.html';
             } else if (type === 'niuma') {
                 window.location.href = 'niuma.html';
             }
