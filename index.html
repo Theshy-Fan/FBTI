@@ -642,9 +642,6 @@
                     <strong style="color: #f5576c;">准到让你怀疑人生！</strong>
                 </div>
                 <button class="start-btn" onclick="startTest()">🚀 开始鉴定</button>
-                <div class="test-links" style="margin-top: 20px;">
-                    <a href="niuma.html" class="test-link-btn">🐴 牛马人格测试</a>
-                </div>
                 <div class="version-toggle">
                     <button class="version-btn" id="versionBtn" onclick="toggleVersion()">切换为：文言文版</button>
                 </div>
@@ -1277,7 +1274,8 @@
             document.getElementById('restartBtn').textContent = btnText;
             document.getElementById('resultScreen').classList.remove('active');
             document.getElementById('questionScreen').classList.remove('active');
-            document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('homeScreen').style.display = 'block';
         }
     </script>
 </body>
