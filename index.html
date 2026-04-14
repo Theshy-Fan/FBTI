@@ -59,6 +59,150 @@
             padding: 15px 10px;
         }
 
+        /* 鉴定中心首页样式 */
+        .home-title {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .home-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .test-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: left;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .test-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+        }
+
+        .test-card.species::before {
+            background: linear-gradient(180deg, #667eea, #764ba2);
+        }
+
+        .test-card.niuma::before {
+            background: linear-gradient(180deg, #f5576c, #ff9a9e);
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .test-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .test-card-icon {
+            font-size: 40px;
+        }
+
+        .test-card-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .test-card-info .tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+
+        .test-card.species .tag {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .test-card.niuma .tag {
+            background: linear-gradient(135deg, #f5576c, #ff9a9e);
+            color: white;
+        }
+
+        .test-card-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .test-card-btn {
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .test-card.species .test-card-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .test-card.niuma .test-card-btn {
+            background: linear-gradient(135deg, #f5576c, #ff9a9e);
+            color: white;
+        }
+
+        .test-card-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .home-tips {
+            margin-top: 20px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 15px;
+            font-size: 13px;
+            color: #f57f17;
+            text-align: left;
+        }
+
+        .home-footer {
+            margin-top: 25px;
+            font-size: 12px;
+            color: #999;
+        }
+
         .start-emoji {
             font-size: 85px;
             margin-bottom: 15px;
@@ -117,6 +261,28 @@
 
         .version-toggle {
             margin-top: 15px;
+        }
+
+        .test-links {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .test-link-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 25px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .test-link-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
         }
 
         .version-btn {
@@ -419,8 +585,54 @@
         </div>
 
         <div class="content">
-            <!-- Start Screen -->
-            <div class="start-container" id="startScreen">
+            <!-- 鉴定中心首页 -->
+            <div class="start-container" id="homeScreen">
+                <div class="home-title">🧪 人格鉴定中心</div>
+                <div class="home-subtitle">多个测试，多种快乐，总有一款适合你</div>
+
+                <div class="test-grid">
+                    <!-- 物种鉴定测试 -->
+                    <div class="test-card species" onclick="goToTest('species')">
+                        <div class="test-card-header">
+                            <div class="test-card-icon">🐾</div>
+                            <div class="test-card-info">
+                                <h3>物种鉴定测试</h3>
+                                <span class="tag">经典推荐</span>
+                            </div>
+                        </div>
+                        <div class="test-card-desc">
+                            26道无厘头问题，鉴定你是哪种神奇物种。融合玄学+瞎扯+心理学，准到让你怀疑人生！
+                        </div>
+                        <div class="test-card-btn">🚀 开始鉴定</div>
+                    </div>
+
+                    <!-- 牛马人格测试 -->
+                    <div class="test-card niuma" onclick="goToTest('niuma')">
+                        <div class="test-card-header">
+                            <div class="test-card-icon">🐴</div>
+                            <div class="test-card-info">
+                                <h3>牛马人格测试</h3>
+                                <span class="tag">重度嘲讽</span>
+                            </div>
+                        </div>
+                        <div class="test-card-desc">
+                            15道题看清你在职场/生活中的地位，20种结果类型，从神兽之王到蝼蚁，顶级扎心！
+                        </div>
+                        <div class="test-card-btn">🚀 开始鉴定</div>
+                    </div>
+                </div>
+
+                <div class="home-tips">
+                    💡 <strong>小提示：</strong>点击卡片即可开始测试，每个测试都是独立的，不用担心数据互通~
+                </div>
+
+                <div class="home-footer">
+                    更多测试正在开发中，敬请期待...
+                </div>
+            </div>
+
+            <!-- 原始 Start Screen (物种测试用) -->
+            <div class="start-container" id="startScreen" style="display: none;">
                 <div class="start-emoji">🐾</div>
                 <div class="start-title">你是哪种"物种"?</div>
                 <div class="start-desc">
@@ -430,6 +642,9 @@
                     <strong style="color: #f5576c;">准到让你怀疑人生！</strong>
                 </div>
                 <button class="start-btn" onclick="startTest()">🚀 开始鉴定</button>
+                <div class="test-links" style="margin-top: 20px;">
+                    <a href="niuma.html" class="test-link-btn">🐴 牛马人格测试</a>
+                </div>
                 <div class="version-toggle">
                     <button class="version-btn" id="versionBtn" onclick="toggleVersion()">切换为：文言文版</button>
                 </div>
@@ -998,10 +1213,35 @@
                 }
                 currentQuestion--;
                 showQuestion();
+            } else {
+                // 返回首页
+                document.getElementById('questionScreen').classList.remove('active');
+                document.getElementById('resultScreen').classList.remove('active');
+                document.getElementById('homeScreen').style.display = 'block';
             }
         }
 
-        function showResult() {
+        function goToTest(type) {
+            if (type === 'species') {
+                document.getElementById('homeScreen').style.display = 'none';
+                document.getElementById('startScreen').style.display = 'block';
+                // 初始化测试
+                currentQuestion = 0;
+                answers = [];
+                scores = {};
+                userCha = randomItem(chas);
+                userFortune = randomItem(fortunes);
+                userLuckyNum = Math.floor(Math.random() * 99 + 1);
+                userLuckyColor = randomItem(colors);
+                isWenyan = false;
+                document.getElementById('versionBtn').textContent = "切换为：文言文版";
+                document.querySelector('.start-title').textContent = "你是哪种\"物种\"?";
+            } else if (type === 'niuma') {
+                window.location.href = 'niuma.html';
+            }
+        }
+
+        function initTest() {
             document.getElementById('questionScreen').classList.remove('active');
 
             let maxType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
