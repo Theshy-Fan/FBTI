@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你是什么牛马？| 牛马人格鉴定</title>
+    <meta name="description" content="15道题鉴定你是哪种牛马，准到让你怀疑人生！">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 100px rgba(245, 87, 108, 0.1);
+            max-width: 520px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #f093fb, #f5576c, #ff9a9e, #f093fb);
+            background-size: 300% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(245, 87, 108, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 30px 25px;
+        }
+
+        /* START SCREEN */
+        .start-container {
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .start-emoji {
+            font-size: 90px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 10px 20px rgba(245, 87, 108, 0.3));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .start-title {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea, #f5576c, #ff9a9e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .start-desc {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.9;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f5576c 100%);
+            background-size: 200% 100%;
+            color: white;
+            border: none;
+            padding: 18px 60px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+            animation: btnShine 2s ease-in-out infinite;
+        }
+
+        @keyframes btnShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.5);
+        }
+
+        .tips {
+            margin-top: 30px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+            border-radius: 16px;
+            font-size: 13px;
+            color: #d32f2f;
+            border-left: 4px solid #f5576c;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            font-size: 14px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* QUESTION SCREEN */
+        .question-container {
+            display: none;
+            min-height: 400px;
+        }
+
+        .question-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f5576c);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+            animation: progressMove 2s linear infinite;
+        }
+
+        @keyframes progressMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .question-number {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-number span {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .question-text {
+            font-size: 19px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .question-text::before {
+            content: '▌';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #f5576c;
+            font-size: 16px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .option {
+            padding: 18px 22px;
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            color: #495057;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(245, 87, 108, 0.05), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option:hover {
+            border-color: #f5576c;
+            background: #fff5f5;
+            transform: translateX(8px);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.15);
+        }
+
+        .option.selected {
+            border-color: #f5576c;
+            background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+            color: #d32f2f;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.2);
+        }
+
+        /* RESULT SCREEN */
+        .result-container {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .result-container.active {
+            display: block;
+        }
+
+        .result-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 25px 20px;
+            margin: -30px -25px 20px -25px;
+            border-radius: 0;
+        }
+
+        .result-emoji {
+            font-size: 70px;
+            margin-bottom: 10px;
+            animation: bounce 1s ease infinite;
+            display: inline-block;
+            filter: drop-shadow(0 10px 30px rgba(245, 87, 108, 0.4));
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .result-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f5576c, #ff9a9e);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .result-title {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .result-type {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 10px;
+        }
+
+        .result-type .tag {
+            display: inline-block;
+            background: rgba(245, 87, 108, 0.3);
+            padding: 4px 10px;
+            border-radius: 8px;
+            margin: 0 5px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .result-main {
+            padding: 0 10px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .result-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .result-score .score-value {
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .result-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 0;
+            margin-bottom: 12px;
+            text-align: left;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+        }
+
+        .result-card .card-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-card .card-header .card-icon {
+            font-size: 18px;
+        }
+
+        .result-card .card-header h3 {
+            color: white;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .result-card .card-content {
+            padding: 20px;
+        }
+
+        .result-card .card-content p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.9;
+            margin-bottom: 12px;
+        }
+
+        .result-card .card-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.9;
+            margin-bottom: 12px;
+        }
+
+        .result-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 扎心真相卡片 */
+        .zhaxin-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 0;
+            margin-bottom: 12px;
+            text-align: left;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            border: 1px solid #ffebee;
+            overflow: hidden;
+        }
+
+        .zhaxin-card .card-header {
+            background: linear-gradient(135deg, #f5576c, #ff9a9e);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .zhaxin-card .card-header .card-icon {
+            font-size: 18px;
+        }
+
+        .zhaxin-card .card-header h3 {
+            color: white;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .zhaxin-card .card-content {
+            padding: 20px;
+        }
+
+        .zhaxin-card .card-content p {
+            font-size: 14px;
+            color: #d32f2f;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            padding: 12px;
+            background: linear-gradient(135deg, #fff5f5, #ffebee);
+            border-radius: 10px;
+            border-left: 3px solid #f5576c;
+        }
+
+        .zhaxin-card .card-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 画像卡片 */
+        .portrait-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 0;
+            margin-bottom: 12px;
+            text-align: left;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            border: 1px solid #e8f5e9;
+            overflow: hidden;
+        }
+
+        .portrait-card .card-header {
+            background: linear-gradient(135deg, #4caf50, #81c784);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .portrait-card .card-header .card-icon {
+            font-size: 18px;
+        }
+
+        .portrait-card .card-header h3 {
+            color: white;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .portrait-card .card-content {
+            padding: 20px;
+        }
+
+        .portrait-card .portrait-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .portrait-card .portrait-tag {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #2e7d32;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .portrait-card .portrait-desc {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .result-card h3 {
+            color: #1a1a2e;
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-card h3::before {
+            content: '💬';
+        }
+
+        .result-card .highlight {
+            display: block;
+            color: #d32f2f;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 12px;
+            background: linear-gradient(135deg, #fff5f5, #ffebee);
+            border-radius: 10px;
+            border-left: 3px solid #f5576c;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .result-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .result-card .tag-item {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #495057;
+        }
+
+        .result-card .tag-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .result-advice {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-radius: 16px;
+            padding: 15px;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .result-advice h4 {
+            color: #f57f17;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-advice p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        .share-btn {
+            background: transparent;
+            border: 2px solid #f5576c;
+            color: #f5576c;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .share-btn:hover {
+            background: #f5576c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐴 你是什么牛马？</h1>
+            <p>牛马人格全面鉴定 · 15题看清你自己</p>
+        </div>
+
+        <div class="content">
+            <!-- START SCREEN -->
+            <div class="start-container" id="startScreen">
+                <div class="start-emoji">🐴💼</div>
+                <div class="start-title">牛马人格鉴定</div>
+                <div class="start-desc">
+                    15道题，精准定位你在职场/生活中的位置<br>
+                    <strong style="color: #f5576c;">顶级嘲讽 · 极度扎心 · 真实预警</strong>
+                </div>
+                <button class="start-btn" onclick="startTest()">🚀 开始鉴定</button>
+                <div class="tips">
+                    ⚠️ <strong>警告：</strong>结果过于真实，可能引起不适，心理脆弱者速速退散！
+                </div>
+                <button class="back-btn" onclick="goBack()">← 返回首页</button>
+            </div>
+
+            <!-- QUESTION SCREEN -->
+            <div class="question-container" id="questionScreen">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="question-number">
+                    <span id="questionNumber">第 1/15 题</span>
+                    <span>牛马指数</span>
+                </div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="options"></div>
+            </div>
+
+            <!-- RESULT SCREEN -->
+            <div class="result-container" id="resultScreen">
+                <div class="result-header">
+                    <div class="result-emoji" id="resultEmoji"></div>
+                    <div class="result-badge" id="resultBadge">鉴定报告</div>
+                    <div class="result-title" id="resultTitle"></div>
+                    <div class="result-type" id="resultType"></div>
+                </div>
+
+                <div class="result-main">
+                    <div class="result-score">
+                        牛马指数
+                        <span class="score-value" id="scoreValue">0</span>
+                    </div>
+
+                    <!-- 综合分析卡片 -->
+                    <div class="result-card" id="resultCard">
+                        <div class="card-header">
+                            <span class="card-icon">📊</span>
+                            <h3>综合分析</h3>
+                        </div>
+                        <div class="card-content" id="resultDesc"></div>
+                    </div>
+
+                    <!-- 扎心瞬间 -->
+                    <div class="zhaxin-card" id="zhaxinCard">
+                        <div class="card-header">
+                            <span class="card-icon">💔</span>
+                            <h3>扎心真相</h3>
+                        </div>
+                        <div class="card-content" id="zhaxinDesc"></div>
+                    </div>
+
+                    <!-- 你的画像 -->
+                    <div class="portrait-card" id="portraitCard">
+                        <div class="card-header">
+                            <span class="card-icon">🪞</span>
+                            <h3>你的画像</h3>
+                        </div>
+                        <div class="card-content" id="portraitDesc"></div>
+                    </div>
+
+                    <!-- 建议 -->
+                    <div class="result-advice" id="resultAdvice">
+                        <h4>💡 建议</h4>
+                        <p id="adviceText"></p>
+                    </div>
+
+                    <!-- 底部按钮 -->
+                    <div class="btn-group">
+                        <button class="restart-btn" onclick="restartTest()">🔄 再测一次</button>
+                        <button class="share-btn" onclick="goBack()">🏠 返回首页</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "周一早上闹钟响了，你的真实反应是？",
+                options: [
+                    { text: "再睡5分钟...然后睡到迟到", score: -8 },
+                    { text: "准时起床，机械式开始打工", score: 5 },
+                    { text: "昨晚失眠，现在处于半梦半醒", score: 0 },
+                    { text: "自然醒，毕竟老子是自由职业（不是）", score: 10 }
+                ]
+            },
+            {
+                question: "领导在群里发了一条'有个急事'，你的第一反应？",
+                options: [
+                    { text: "装死，假装没看到，等别人回复", score: 8 },
+                    { text: "内心咯噔一下，开始自我审视做错了什么", score: -5 },
+                    { text: "积极响应：'收到！马上处理！'", score: 3 },
+                    { text: "直接划走，关我屁事.jpg", score: 12 }
+                ]
+            },
+            {
+                question: "午休时同事叫你去吃饭，你通常？",
+                options: [
+                    { text: "婉拒，继续工作或者装忙", score: 2 },
+                    { text: "开心干饭，社交能量+100", score: 10 },
+                    { text: "点外卖，边吃边追剧最快乐", score: 6 },
+                    { text: "独来独往，一个人去吃更自在", score: 7 }
+                ]
+            },
+            {
+                question: "下班点到了，但领导还没走，你会？",
+                options: [
+                    { text: "到点就走，谁也不惯着", score: 12 },
+                    { text: "再看一眼领导，犹豫再三后走人", score: 5 },
+                    { text: "再等半小时，表示我也很努力", score: 0 },
+                    { text: "领导不走我不走，卷死他们", score: -5 }
+                ]
+            },
+            {
+                question: "发工资后你会第一时间？",
+                options: [
+                    { text: "还花呗/信用卡，然后看看还剩多少", score: -3 },
+                    { text: "存起来理财，积少成多", score: 9 },
+                    { text: "该吃吃该喝喝，犒劳自己", score: 5 },
+                    { text: "记账复盘，分析每一笔去向", score: 8 }
+                ]
+            },
+            {
+                question: "看到朋友圈有人晒年终奖/升职，你会？",
+                options: [
+                    { text: "内心毫无波动，甚至想笑", score: 10 },
+                    { text: "焦虑到失眠，疯狂自我怀疑", score: -8 },
+                    { text: "表面点赞，内心柠檬精", score: 0 },
+                    { text: "直接划走，关我屁事+1", score: 12 }
+                ]
+            },
+            {
+                question: "同事把不属于你的工作推给你，你会？",
+                options: [
+                    { text: "欣然接受，觉得是锻炼机会", score: -5 },
+                    { text: "找借口婉拒，态度坚决", score: 10 },
+                    { text: "内心不爽但勉强答应", score: -2 },
+                    { text: "表面答应，然后无限拖延", score: 5 }
+                ]
+            },
+            {
+                question: "周末两天你的真实状态？",
+                options: [
+                    { text: "加班，或者随时待命回消息", score: 0 },
+                    { text: "在家躺尸，追剧睡觉虚度光阴", score: 5 },
+                    { text: "学习/搞副业/提升自己", score: 8 },
+                    { text: "各种局排满，社交达人", score: 10 }
+                ]
+            },
+            {
+                question: "如果现在中大奖1000万，你会？",
+                options: [
+                    { text: "立刻辞职，世界这么大我要去看看", score: 15 },
+                    { text: "低调继续上班，假装什么都没发生", score: 2 },
+                    { text: "换个轻松工作，继续混日子", score: 8 },
+                    { text: "疯狂消费，先爽了再说", score: 5 }
+                ]
+            },
+            {
+                question: "工作中遇到难题，你会优先选择？",
+                options: [
+                    { text: "自己死磕，不到万不得已不求助", score: 4 },
+                    { text: "甩锅给同事，或者推给实习生", score: -3 },
+                    { text: "求助同事/百度/群聊，问就完事", score: 8 },
+                    { text: "拖到最后，然后奇迹般解决", score: 5 }
+                ]
+            },
+            {
+                question: "别人问你'最近怎么样'，你最常说？",
+                options: [
+                    { text: "最近好累啊/不想上班/想死", score: -5 },
+                    { text: "还行吧/就那样/凑合", score: 3 },
+                    { text: "这个瓜你知道吗...", score: 7 },
+                    { text: "我在准备搞个大事（但还没行动）", score: 6 }
+                ]
+            },
+            {
+                question: "你在公司的存在感属于？",
+                options: [
+                    { text: "小透明，几乎没人注意到我", score: 3 },
+                    { text: "核心人物，存在感拉满", score: 12 },
+                    { text: "有几个关系好的同事，但不多", score: 7 },
+                    { text: "讨人厌的那个，谁见了我都绕路", score: -2 }
+                ]
+            },
+            {
+                question: "看到别人成功且赚大钱，你会？",
+                options: [
+                    { text: "反思自己，开始悄悄努力", score: 8 },
+                    { text: "内心不平衡，嘴硬说人家运气好", score: -3 },
+                    { text: "关我屁事，继续躺平", score: 10 },
+                    { text: "真心赞叹，然后继续咸鱼", score: 6 }
+                ]
+            },
+            {
+                question: "你对未来的规划是？",
+                options: [
+                    { text: "走一步看一步，船到桥头自然直", score: 5 },
+                    { text: "有清晰目标，正在稳步推进", score: 12 },
+                    { text: "完全没想过，今朝有酒今朝醉", score: 3 },
+                    { text: "焦虑但不做行动，夜里想想千条路", score: -5 }
+                ]
+            },
+            {
+                question: "最后一道：你自己觉得自己是哪种人？",
+                options: [
+                    { text: "普通但自信的普通人", score: 7 },
+                    { text: "怀才不遇的潜力股（实际上不是）", score: -3 },
+                    { text: "人间清醒，活得通透", score: 10 },
+                    { text: "卷王/躺平派/咸鱼 - 自我认知清晰", score: 8 }
+                ]
+            }
+        ];
+
+        const results = [
+            {
+                minScore: 115, maxScore: 999,
+                title: "SSSR · 神兽之王",
+                subtitle: "顶级人上人 · 宇宙最强打工人",
+                emoji: "🐎✨",
+                tag: "GOD",
+                tags: ["人中龙凤", "天选之子", "命运宠儿"],
+                desc: "<p>恭喜！你他娘的就是传说中的天选之人！</p><p>你可能已经实现了财富自由，或者正处于人生巅峰。但别急着高兴得太早——<span class='highlight'>神兽再牛，不也是给人骑的吗？</span></p><p>汗血宝马日行千里，最后还不是被人骑着去战场？你的风光背后，可能是无数个加班到凌晨的夜晚换来的，或者是祖上积德+运气爆棚的结果。但问题是——你能保证一直这么幸运下去吗？小心从神坛跌落，那可就变成笑话了。</p>",
+                zhaxin: [
+                    "别装了，你能有今天，90%是因为运气好，而不是因为能力强",
+                    "就算你现在风光，等你40岁再看看？职场35岁定律了解一下",
+                    "你以为自己是人上人，其实在真正的富人眼里，你就是个高级打工仔"
+                ],
+                portrait: {
+                    tags: ["天选之人", "人生赢家", "运气爆棚", "前排吃瓜"],
+                    desc: "你属于那种'出生在罗马'的人，或者踩准了时代的红利。别人还在为生计奔波，你已经在考虑诗和远方。但别太得意，你的成功经验对普通人毫无参考价值——毕竟不是每个人都能中基因彩票的。"
+                },
+                advice: "虽然你现在很牛，但记得给自己留条后路。万一哪天运气用完了，至少还有Plan B。以及...别太嘚瑟，低调做人。"
+            },
+            {
+                minScore: 90, maxScore: 114,
+                title: "SSR · 独角兽",
+                subtitle: "稀有物种 · 锦鲤附体",
+                emoji: "🦄🌟",
+                tag: "UNICORN",
+                tags: ["万中无一", "运气爆棚", "自带光环"],
+                desc: "<p>你是那种万里挑一的稀有存在！</p><p>但我必须残忍地告诉你：<span class='highlight'>独角兽之所以稀有，是因为这玩意儿根本TM不存在。</span></p><p>你可能自我感觉良好，觉得自己是天选之子。但醒醒吧，你只是运气好点而已。真正的独角兽公司死亡率高达99%，你以为你是例外？小心在自己的信息茧房里裸泳，出门看看真实世界，你会发现自己在裸奔。</p>",
+                zhaxin: [
+                    "你只是运气好，不是能力强，别把运气当实力",
+                    "独角兽之所以稀有，是因为它只存在于幻想中——跟你一样",
+                    "你成功的真正原因是：时代红利+运气好+有人帮你，可别把这个当成自己的本事"
+                ],
+                portrait: {
+                    tags: ["锦鲤本鲤", "欧皇附体", "自带BGM", "人生开挂"],
+                    desc: "你是那种喝水都能长胖、买彩票能中奖、找工作能被HR追着要的类型。但你的问题是把运气当实力，以为自己很牛逼。其实你只是比較幸运而已，一旦运气用完，你就知道什么叫残忍了。"
+                },
+                advice: "趁运气还好的时候，多提升点真本事。别把所有鸡蛋放在运气这个篮子里，不然哪天运气没了，你啥也不是。"
+            },
+            {
+                minScore: 70, maxScore: 89,
+                title: "SR · 千里马",
+                subtitle: "潜力无限 · 蓄势待发",
+                emoji: "🐴💨",
+                tag: "TALENT",
+                tags: ["能力出众", "潜力股", "未来可期"],
+                desc: "<p>你是那种'我很强但我不想说'的类型。</p><p>但现实很残酷：<span class='highlight'>千里马常有，而伯乐不常有啊朋友。</span></p><p>你的能力确实不错，但在这个内卷到疯狂的时代，千里马比草还多。赛道太挤，卷王太多，小心变成'千里马的尸体'——死在通往成功的路上，还没人给你收尸。</p><p>你最大的问题不是能力，而是太把自己当回事了。醒醒吧，这个世界不缺千里马，缺的是愿意给千里马机会的傻逼伯乐。</p>",
+                zhaxin: [
+                    "你是有能力，但有能力的人太多了，凭什么轮到你？",
+                    "千里马的下场通常是：累死在职场上，或者被伯乐坑死",
+                    "你的怀才不遇其实是因为你不会来事，这个社会，会干的不如会说的"
+                ],
+                portrait: {
+                    tags: ["潜力股", "有能力", "怀才不遇", "需要机会"],
+                    desc: "你是那种'我很强但没人发现'的类型。你有一定的能力，但你的问题是太低调了，觉得是金子总会发光。但这个时代，金子太多了，而伯乐是瞎子。你需要学会推销自己，不然真的会埋没到死。"
+                },
+                advice: "别光学技能，也要学会推销自己。这个年代，会干的不如会说的。低调是美德，但过度低调就是懦弱。"
+            },
+            {
+                minScore: 50, maxScore: 69,
+                title: "R · 骆驼",
+                subtitle: "任劳任怨 · 负重前行",
+                emoji: "🐪🏜️",
+                tag: "WORKHORSE",
+                tags: ["老黄牛", "踏实肯干", "任劳任怨"],
+                desc: "<p>你是那种典型的'我可以'选手。</p><p>但扎心的事实是：<span class='highlight'>骆驼再能扛，累死在沙漠里也没人知道，更没人心疼。</span></p><p>你任劳任怨、踏实肯干、不抱怨、不诉苦——听起来是优点，但在这个弱肉强食的社会，这种人通常是最容易被剥削的那个。你的努力真的被看见了吗？还是只是感动了自己？</p><p>小心变成职场老黄牛，干到退休还是那个样。工资没涨，职位没升，唯一的收获是一身病和日益稀疏的头发。</p>",
+                zhaxin: [
+                    "你的任劳任怨在领导眼里就是'好欺负'，活该你干最多拿最少",
+                    "骆驼的下场就是累死——你的身体已经在报警了，自己注意点",
+                    "你的努力感动了自己，感动了老板，但感动不了你的银行账户"
+                ],
+                portrait: {
+                    tags: ["老黄牛", "职场好人", "加班狂魔", "背锅侠"],
+                    desc: "你是那种'我可以'选手，什么任务都接，什么锅都背。你以为这样会被认可？但实际上，你的善良在别人眼里只是软弱。你越是这样，别人越是欺负你。醒醒吧，会哭的孩子有奶喝。"
+                },
+                advice: "会哭的孩子有奶喝，该邀功时要邀功。别傻傻地埋头干活，最后功劳全是别人的。你要学会让自己的付出被看见。"
+            },
+            {
+                minScore: 30, maxScore: 49,
+                title: "N · 蒙古马",
+                subtitle: "普通且平凡 · 量大管饱",
+                emoji: "🐎🌾",
+                tag: "NORMAL",
+                tags: ["平均水准", "芸芸众生", "基数庞大"],
+                desc: "<p>你是那种'平均水准以上'的类型。</p><p>但我想问你：<span class='highlight'>平均本身就是一种平庸，甚至是一种失败。</span></p><p>你有一定的能力，但没有任何突出的亮点；你努力但不够拼命；你聪明但不够卷。在这个人人都在卷出天际的时代，你的处境很危险——随时可能被更便宜、更年轻、更能卷的人取代。</p><p>你就像草原上的蒙古马，数量多到数不清，但没人记得住哪一匹是你。</p>",
+                zhaxin: [
+                    "平均就是平庸，平庸就是失败，你的人生就是这样高不成低不就",
+                    "你以为自己很努力？但你只是看起来很努力而已，实际产出为0",
+                    "你的安全感是假的，35岁危机了解一下？到头来你什么都不是"
+                ],
+                portrait: {
+                    tags: ["普通人", "芸芸众生", "分母本分", "凑数达人"],
+                    desc: "你是那种'比上不足比下有余'的人。你不是什么牛马，你只是一个普通的分母。这个社会80%的人都是你这样的存在——不是最差的，但也不是最好的。你的人生就是'还可以'三个字，但'还可以'等于'不怎么样'。"
+                },
+                advice: "是时候做出改变了。要么卷死别人，要么被别人卷死。没有中间选项。找到自己的核心竞争力，别再当分母。"
+            },
+            {
+                minScore: 10, maxScore: 29,
+                title: "R- · 驽马",
+                subtitle: "躺平大师 · 咸鱼王者",
+                emoji: "🐴😴",
+                tag: "LAZY",
+                tags: ["躺平派", "咸鱼", "人间清醒"],
+                desc: "<p>你是那种'差不多得了'的类型。</p><p>驽马的意思翻译成人话就是：<span class='highlight'>跑不快的马，既没有千里马的速度，也没有蒙古马的耐力。</span></p><p>你可能觉得自己是'人间清醒'，看透了职场套路选择躺平。但我必须残忍地告诉你——醒醒吧，你那不叫躺平，叫逃避。</p><p>驽马的宿命就是被淘汰。不是被开除，是被时代抛弃。你所谓的'岁月静好'，不过是有人在替你负重前行。你以为你在躺平，其实你只是在等死。</p>",
+                zhaxin: [
+                    "你不是在躺平，你只是在给自己的废物找借口",
+                    "躺平是需要资本的，你配吗？你有那个资本吗？",
+                    "你以为自己看透了？其实你只是害怕面对现实而已，懦弱"
+                ],
+                portrait: {
+                    tags: ["躺平党", "咸鱼王", "逃避大师", "自我安慰"],
+                    desc: "你是那种'看透了一切'的人，觉得努力没用，选择躺平。但你真的是看透了吗？你只是不敢面对失败而已。你的躺平不是境界高，而是——你TM就是不敢努力。"
+                },
+                advice: "别给自己的废物找借口了。躺平是需要资本的，你配吗？趁还有机会，赶紧起来干活吧。"
+            },
+            {
+                minScore: -100, maxScore: 9,
+                title: "SR- · 骡子",
+                subtitle: "杂牌产物 · 四不像",
+                emoji: "🫏⚙️",
+                tag: "TRASH",
+                tags: ["能力堪忧", "四不像", "待回收"],
+                desc: "<p>你是那种'不知道自己是哪种人'的类型。</p><p>骡子最大的悲哀是：<span class='highlight'>既没有马的奔跑能力，也没有驴的耐力——它甚至没有生育能力，无法延续自己。</span></p><p>你可能在各个方面都有点问题：能力一般、态度一般、运气一般、长相一般、存款一般...最可怕的是，你可能还不觉得自己有问题。</p><p>你就像那个高不成低不就的骡子，想卷卷不过别人，想躺躺不舒服。在这个竞争激烈的社会，你就是一个尴尬的存在——食之无味，弃之也不可惜。</p>",
+                zhaxin: [
+                    "你的一切问题都源于一个词：'不够'——不够努力，不够聪明，不够好看",
+                    "你以为自己只是运气不好？醒醒吧，你就是能力不行",
+                    "骡子的结局是什么？——被杀。你再这样下去就是等死"
+                ],
+                portrait: {
+                    tags: ["四不像", "高不成低不就", "迷茫一代", "待拯救"],
+                    desc: "你是那种'不知道自己几斤几两'的人。你什么都想，但什么都不精；你什么都学，但什么都不精。你就像那个骡子，看起来什么都会一点，但实际上什么都不是。在这个专精的时代，你这种'全才'就是废物。"
+                },
+                advice: "别再自我陶醉了。你需要的是彻底反思+彻底改变。再这样下去，你连当骡子的资格都没有。"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let totalScore = 0;
+
+        function startTest() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('questionScreen').classList.add('active');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `第 ${currentQuestion + 1}/15 题`;
+            document.getElementById('questionText').textContent = q.question;
+
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+
+            const optionsHtml = q.options.map((opt, i) =>
+                `<div class="option" onclick="selectOption(${i})">${opt.text}</div>`
+            ).join('');
+
+            document.getElementById('options').innerHTML = optionsHtml;
+        }
+
+        function selectOption(index) {
+            const score = questions[currentQuestion].options[index].score;
+            totalScore += score;
+
+            document.querySelectorAll('.option').forEach((el, i) => {
+                if (i === index) el.classList.add('selected');
+            });
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }, 500);
+        }
+
+        function showResult() {
+            document.getElementById('questionScreen').classList.remove('active');
+            document.getElementById('resultScreen').classList.add('active');
+
+            let result = results[0];
+            for (let r of results) {
+                if (totalScore >= r.minScore && totalScore <= r.maxScore) {
+                    result = r;
+                    break;
+                }
+            }
+
+            // 数字滚动动画
+            animateValue('scoreValue', 0, totalScore, 1500);
+
+            document.getElementById('resultEmoji').textContent = result.emoji;
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultType').innerHTML = `类型：${result.subtitle} <span class="tag">${result.tag}</span>`;
+
+            // 综合分析卡片
+            document.getElementById('resultDesc').innerHTML = result.desc;
+
+            // 扎心真相卡片
+            const zhaxinHtml = result.zhaxin.map(z => `<p>${z}</p>`).join('');
+            document.getElementById('zhaxinDesc').innerHTML = zhaxinHtml;
+
+            // 画像卡片
+            const portraitTagsHtml = result.portrait.tags.map(tag =>
+                `<span class="portrait-tag">${tag}</span>`
+            ).join('');
+            document.getElementById('portraitDesc').innerHTML =
+                `<div class="portrait-tags">${portraitTagsHtml}</div>
+                 <div class="portrait-desc">${result.portrait.desc}</div>`;
+
+            // 建议
+            document.getElementById('adviceText').textContent = result.advice;
+        }
+
+        function animateValue(id, start, end, duration) {
+            let obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function restartTest() {
+            currentQuestion = 0;
+            totalScore = 0;
+            document.getElementById('resultScreen').classList.remove('active');
+            document.getElementById('questionScreen').classList.add('active');
+            showQuestion();
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
