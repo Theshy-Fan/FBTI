@@ -265,9 +265,9 @@
             document.getElementById('resultTitle').textContent = result.title;
             document.getElementById('resultSubtitle').textContent = result.subtitle;
             document.getElementById('resultType').innerHTML = `<span class="tag">${result.tag}</span>`;
-            document.getElementById('resultDesc').innerHTML = `<p>${result.desc || ''}</p>`;
+            document.getElementById('resultDesc').innerHTML = `<p>${result.portrait.desc}</p><p class='highlight'>${result.advice}</p>`;
             document.getElementById('zhaxinDesc').innerHTML = result.zhaxin.map(z => `<p>${z}</p>`).join('');
-            document.getElementById('portraitDesc').innerHTML = `<div class="portrait-tags">${result.portrait.tags.map(t => `<span class="portrait-tag">${t}</span>`).join('')}</div><div class="portrait-desc">${result.portrait.desc}</div>`;
+            document.getElementById('portraitDesc').innerHTML = `<div class="portrait-tags">${result.portrait.tags.map(t => `<span class="portrait-tag">${t}</span>`).join('')}</div>`;
             document.getElementById('adviceText').textContent = result.advice;
         }
 
