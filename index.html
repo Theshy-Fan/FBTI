@@ -658,7 +658,10 @@
                 </div>
                 <div class="question-text" id="questionText"></div>
                 <div class="options" id="options"></div>
-                <button class="back-btn" id="backBtn" onclick="goBack()">← 返回上一题</button>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="back-btn" id="backBtn" onclick="goBack()">← 返回上一题</button>
+                    <button class="back-btn" style="background: #667eea; color: white; border: none;" onclick="goToHome()">🏠 返回首页</button>
+                </div>
             </div>
 
             <!-- Result Screen -->
@@ -1217,6 +1220,13 @@
                 document.getElementById('resultScreen').classList.remove('active');
                 document.getElementById('homeScreen').style.display = 'block';
             }
+        }
+
+        function goToHome() {
+            document.getElementById('questionScreen').classList.remove('active');
+            document.getElementById('resultScreen').classList.remove('active');
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('homeScreen').style.display = 'block';
         }
 
         function goToTest(type) {
