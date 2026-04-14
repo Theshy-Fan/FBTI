@@ -358,7 +358,18 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+        }
+
+        .result-subtitle {
+            display: inline-block;
+            background: linear-gradient(135deg, #f5576c, #ff9a9e);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         .result-type {
@@ -716,6 +727,7 @@
                     <div class="result-emoji" id="resultEmoji"></div>
                     <div class="result-badge" id="resultBadge">鉴定报告</div>
                     <div class="result-title" id="resultTitle"></div>
+                    <div class="result-subtitle" id="resultSubtitle"></div>
                     <div class="result-type" id="resultType"></div>
                 </div>
 
@@ -947,7 +959,7 @@
                 advice: "趁运气还好的时候，多提升点真本事。别把所有鸡蛋放在运气这个篮子里，不然哪天运气没了，你啥也不是。"
             },
             {
-                minScore: 50, maxScore: 84,
+                minScore: 55, maxScore: 60,
                 title: "SR · 千里马",
                 subtitle: "潜力无限 · 蓄势待发",
                 emoji: "🐴💨",
@@ -1083,7 +1095,8 @@
 
             document.getElementById('resultEmoji').textContent = result.emoji;
             document.getElementById('resultTitle').textContent = result.title;
-            document.getElementById('resultType').innerHTML = `类型：${result.subtitle} <span class="tag">${result.tag}</span>`;
+            document.getElementById('resultSubtitle').textContent = result.subtitle;
+            document.getElementById('resultType').innerHTML = `<span class="tag">${result.tag}</span>`;
 
             // 综合分析卡片
             document.getElementById('resultDesc').innerHTML = result.desc;
